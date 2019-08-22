@@ -1,14 +1,15 @@
 package com.example.design.command.draw;
 
+import com.example.design.command.command.ColorCommand;
 import com.example.design.command.command.MacroCommand;
 
 import java.awt.*;
 
 public class DrawCanvas extends Canvas implements Drawable {
     // 颜色
-    private Color color = Color.red;
+    private Color color;
     // 要绘制的圆点的半径
-    private int radius = 6;
+    private int radius;
     // 命令的历史记录
     private MacroCommand history;
 
@@ -17,6 +18,7 @@ public class DrawCanvas extends Canvas implements Drawable {
         setSize(width, height);
         setBackground(Color.white);
         this.history = history;
+        init();
     }
 
     // 重新全部绘制
@@ -24,10 +26,21 @@ public class DrawCanvas extends Canvas implements Drawable {
         history.execute();
     }
 
+    // 初始化
+    public void init() {
+        color = Color.red;
+        radius = 6;
+        history.append(new ColorCommand(this, color));
+    }
+
     // 绘制
     public void draw(int x, int y) {
         Graphics g = getGraphics();
         g.setColor(color);
         g.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
