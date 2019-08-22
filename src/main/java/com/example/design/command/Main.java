@@ -8,7 +8,7 @@ import com.example.design.command.draw.DrawCanvas;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Main extends JFrame implements ActionListener, MouseMotionListener, WindowListener {
+public class Main extends JFrame implements ActionListener {
     // 绘制的历史记录
     private MacroCommand history = new MacroCommand();
     // 绘制区域
@@ -20,8 +20,18 @@ public class Main extends JFrame implements ActionListener, MouseMotionListener,
     public Main(String title) {
         super(title);
 
-        this.addWindowListener(this);
-        canvas.addMouseMotionListener(this);
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+        canvas.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                Command cmd = new DrawCommand(canvas, e.getPoint());
+                history.append(cmd);
+                cmd.execute();
+            }
+        });
         clearButton.addActionListener(this);
 
         Box buttonBox = new Box(BoxLayout.X_AXIS);
@@ -41,39 +51,6 @@ public class Main extends JFrame implements ActionListener, MouseMotionListener,
             history.clear();
             canvas.repaint();
         }
-    }
-
-    // MouseMotionListener接口中的方法
-    public void mouseMoved(MouseEvent e) {
-    }
-
-    public void mouseDragged(MouseEvent e) {
-        Command cmd = new DrawCommand(canvas, e.getPoint());
-        history.append(cmd);
-        cmd.execute();
-    }
-
-    // WindowListener接口中的方法
-    public void windowClosing(WindowEvent e) {
-        System.exit(0);
-    }
-
-    public void windowActivated(WindowEvent e) {
-    }
-
-    public void windowClosed(WindowEvent e) {
-    }
-
-    public void windowDeactivated(WindowEvent e) {
-    }
-
-    public void windowDeiconified(WindowEvent e) {
-    }
-
-    public void windowIconified(WindowEvent e) {
-    }
-
-    public void windowOpened(WindowEvent e) {
     }
 
     public static void main(String[] args) {
