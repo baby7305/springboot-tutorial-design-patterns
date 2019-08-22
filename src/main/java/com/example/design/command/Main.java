@@ -15,6 +15,8 @@ public class Main extends JFrame implements ActionListener, MouseMotionListener,
     private DrawCanvas canvas = new DrawCanvas(400, 400, history);
     // 删除按钮
     private JButton clearButton = new JButton("clear");
+    // 撤销按钮
+    private JButton undoButton = new JButton("undo");
 
     // 构造函数
     public Main(String title) {
@@ -23,9 +25,11 @@ public class Main extends JFrame implements ActionListener, MouseMotionListener,
         this.addWindowListener(this);
         canvas.addMouseMotionListener(this);
         clearButton.addActionListener(this);
+        undoButton.addActionListener(this);
 
         Box buttonBox = new Box(BoxLayout.X_AXIS);
         buttonBox.add(clearButton);
+        buttonBox.add(undoButton);
         Box mainBox = new Box(BoxLayout.Y_AXIS);
         mainBox.add(buttonBox);
         mainBox.add(canvas);
@@ -39,6 +43,9 @@ public class Main extends JFrame implements ActionListener, MouseMotionListener,
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == clearButton) {
             history.clear();
+            canvas.repaint();
+        } else if (e.getSource() == undoButton) {
+            history.undo();
             canvas.repaint();
         }
     }
