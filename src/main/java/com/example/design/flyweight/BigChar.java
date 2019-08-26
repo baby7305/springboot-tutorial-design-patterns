@@ -5,8 +5,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class BigChar {
